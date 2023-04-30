@@ -6,12 +6,12 @@
     <div class="tw-grid md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-8">
       <div
         v-for="(template, index) in templates"
-        :key="index"
-        @click="toggleShowModal()"
+        :key="index + template.templateImage"
+        @click="toggleShowModal(index)"
         class="tw-cursor-pointer"
       >
         <img :src="template.templateImage" class="md:tw-h-full" alt="template" />
-        <div v-if="showModal">
+        <div v-if="showModal && previewIndex === index">
           <Teleport to="#teleport-modal">
             <PopupModal class="" @close="closeModal">
               <template v-slot:content>
@@ -40,6 +40,7 @@ import ButtonComponent from '@/components/general/ButtonComponent.vue'
 const router = useRouter()
 
 let showModal = ref(false)
+let previewIndex = ref(null)
 
 const editBtnStyle = reactive({
   backgroundColor: '#24419a',
@@ -56,8 +57,9 @@ defineProps({
   }
 })
 
-const toggleShowModal = () => {
+const toggleShowModal = (index) => {
   showModal.value = true
+  previewIndex.value = index
 }
 const closeModal = () => {
   showModal.value = false

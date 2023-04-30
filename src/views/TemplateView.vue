@@ -10,6 +10,7 @@
 import { reactive } from 'vue'
 import TemplateSection from '@/layout/templateLayout/TemplateSection.vue'
 import template1 from '@/assets/img/template.png'
+import template2 from '@/assets/img/template2.png'
 
 const templates = reactive([
   {
@@ -46,6 +47,40 @@ const templates = reactive([
                       <p class="tw-text-white tw-text-center tw-text-sm tw-mt-2">
                         No credit card required. No surprises
                       </p>
+                    </div>
+                  </form>`
+  },
+  {
+    templateImage: template2,
+    previewHTML: `<form">
+                    <div class="tw-flex tw-flex-col tw-items-center tw-bg-white tw-py-1">
+                      <div class="tw-h-12 tw-w-12 tw-border tw-rounded-full tw-bg-gray tw-py-1.5 tw--mt-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="30" viewBox="0 0 32 32" id="profile" class="tw--ml-0.5">
+                          <g data-name="Layer 2">
+                            <circle cx="16" cy="6.96" r="6"></circle>
+                            <path
+                              d="M30.86,26.84a15.07,15.07,0,0,0-4.11-7.47A12.47,12.47,0,0,0,25.13,18,15,15,0,0,0,16,15,15.24,15.24,0,0,0,5.24,19.37a15.07,15.07,0,0,0-4.11,7.47,3.42,3.42,0,0,0,.69,2.88A3.52,3.52,0,0,0,4.58,31H27.42a3.52,3.52,0,0,0,2.75-1.32A3.42,3.42,0,0,0,30.86,26.84Z"
+                            ></path>
+                          </g>
+                        </svg>
+                      </div>
+                      <p class="tw-text-sm tw-font-bold tw-text-gray">Temi Kara</p>
+                    </div>
+                    <div class="tw-w-[450px] tw-h-[450px] tw-bg-red tw-px-20 tw-py-32">
+                      <div class="tw-flex tw-flex-col">
+                        <h1 class="tw-text-white tw-text-xl tw-font-bold tw-text-center tw-m-auto">
+                          We're excited to announce we're now doing XYZ
+                        </h1>
+                        <p class="tw-text-white tw-text-md tw-text-center tw-mt-6">
+                          Click below to get the full story
+                        </p>
+                      </div>
+                      <button
+                          type="reset"
+                          class="tw-w-full tw-flex tw-justify-center tw-bg-white tw-rounded-lg tw-font-semibold tw-text-red hover:tw-text-red hover:tw-bg-red-bg1 tw-p-4 tw-mt-4"
+                      >
+                          <span>Show More</span>
+                      </button>
                     </div>
                   </form>`
   }
