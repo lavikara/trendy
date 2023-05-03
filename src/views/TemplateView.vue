@@ -1,5 +1,8 @@
 <template>
   <div id="templateview">
+    <nav>
+      <TopNavbar />
+    </nav>
     <main class="container tw-px-4 tw-py-28 lg:tw-pb-44 lg:tw-pt-32">
       <TemplateSection :templates="templates" />
     </main>
@@ -8,16 +11,18 @@
 
 <script setup>
 import { reactive } from 'vue'
+import TopNavbar from '@/layout/navigation/TopNavbar.vue'
 import TemplateSection from '@/layout/templateLayout/TemplateSection.vue'
 import template1 from '@/assets/img/template.png'
 import template2 from '@/assets/img/template2.png'
 
 const templates = reactive([
   {
+    id: 1,
     templateImage: template1,
-    previewHTML: `<form class="tw-h-[450px] tw-max-w-[450px] tw-bg-orange-bg2 tw-rounded-full tw-py-[5px]">
-                    <div class="tw-h-[440px] tw-max-w-[440px] tw-bg-orange-white tw-rounded-full tw-border-2 tw-border-white tw-px-10 tw-mx-[5px]">
-                      <div class="tw-flex tw-justify-center tw-mt-4">
+    previewHTML: `<form id="templateContainer" class="tw-relative tw-h-[450px] tw-w-[450px] tw-bg-orange-bg2 tw-rounded-full  tw-py-[5px]">
+                    <div class="tw-h-[440px] tw-w-[440px] tw-bg-orange-white tw-rounded-full tw-border-2 tw-border-white tw-px-10 tw-mx-[5px]">
+                      <div draggable="true" class="tw-absolute tw-left-[150px] tw-flex tw-justify-center tw-mt-4 tw-z-50">
                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="30" enable-background="new 0 0 24 24" viewBox="0 0 24 24" id="star" class="tw-mt-4">
                           <path d="M21.9189453,10.1265259c0.0802612-0.546814-0.2979736-1.0551147-0.8447266-1.135376L15.4228516,8.164978l-2.5253906-5.1464844c-0.0909424-0.1569824-0.2214355-0.2873535-0.37854-0.3781128c-0.4960327-0.2866821-1.1306152-0.1170044-1.4173584,0.3790894L8.5771484,8.164978L2.9257812,8.9912109C2.7097168,9.0228882,2.5100098,9.1244507,2.3569946,9.2802734c-0.387146,0.3943481-0.3812256,1.0278931,0.0131226,1.4150391l4.0927734,4.0126953l-0.9658203,5.6640625c-0.0091553,0.0541992-0.013855,0.1090698-0.0139771,0.1641235c-0.0015259,0.5534058,0.4458618,1.0032959,0.9993286,1.0048218c0.163147-0.0002441,0.3237915-0.0404663,0.4677734-0.1171875L12,18.7539062l5.0488281,2.6689453c0.1951294,0.1035767,0.4190063,0.1396484,0.6367798,0.1025391c0.5441895-0.0928345,0.9100952-0.6091309,0.8173218-1.1533203l-0.9658203-5.6640625l4.09375-4.0137329C21.7861328,10.5414429,21.8872681,10.3421021,21.9189453,10.1265259z M16.6503906,14.1766968c-0.1170654,0.1148682-0.1706543,0.2796631-0.1435547,0.4414062l1.0097656,5.9208984l-5.2832031-2.7930298c-0.1463013-0.0761719-0.3204956-0.0761719-0.4667969,0L6.4833984,20.539978l1.0097046-5.921814c0.0271606-0.1617432-0.0264282-0.3265381-0.1435547-0.4414062L3.0702515,9.9814453l5.9121094-0.8642578C9.1456299,9.0927734,9.286499,8.9898682,9.359375,8.8417969L12,3.460022l2.640564,5.3817139c0.072876,0.1480713,0.2138062,0.2509766,0.3770142,0.2753906l5.9130859,0.8632812L16.6503906,14.1766968z"></path>
                         </svg>
@@ -28,29 +33,39 @@ const templates = reactive([
                           <path d="M21.9189453,10.1265259c0.0802612-0.546814-0.2979736-1.0551147-0.8447266-1.135376L15.4228516,8.164978l-2.5253906-5.1464844c-0.0909424-0.1569824-0.2214355-0.2873535-0.37854-0.3781128c-0.4960327-0.2866821-1.1306152-0.1170044-1.4173584,0.3790894L8.5771484,8.164978L2.9257812,8.9912109C2.7097168,9.0228882,2.5100098,9.1244507,2.3569946,9.2802734c-0.387146,0.3943481-0.3812256,1.0278931,0.0131226,1.4150391l4.0927734,4.0126953l-0.9658203,5.6640625c-0.0091553,0.0541992-0.013855,0.1090698-0.0139771,0.1641235c-0.0015259,0.5534058,0.4458618,1.0032959,0.9993286,1.0048218c0.163147-0.0002441,0.3237915-0.0404663,0.4677734-0.1171875L12,18.7539062l5.0488281,2.6689453c0.1951294,0.1035767,0.4190063,0.1396484,0.6367798,0.1025391c0.5441895-0.0928345,0.9100952-0.6091309,0.8173218-1.1533203l-0.9658203-5.6640625l4.09375-4.0137329C21.7861328,10.5414429,21.8872681,10.3421021,21.9189453,10.1265259z M16.6503906,14.1766968c-0.1170654,0.1148682-0.1706543,0.2796631-0.1435547,0.4414062l1.0097656,5.9208984l-5.2832031-2.7930298c-0.1463013-0.0761719-0.3204956-0.0761719-0.4667969,0L6.4833984,20.539978l1.0097046-5.921814c0.0271606-0.1617432-0.0264282-0.3265381-0.1435547-0.4414062L3.0702515,9.9814453l5.9121094-0.8642578C9.1456299,9.0927734,9.286499,8.9898682,9.359375,8.8417969L12,3.460022l2.640564,5.3817139c0.072876,0.1480713,0.2138062,0.2509766,0.3770142,0.2753906l5.9130859,0.8632812L16.6503906,14.1766968z"></path>
                         </svg>
                       </div>
-                      <h1 class="tw-text-white tw-text-2xl tw-font-bold tw-text-center tw-mt-8">
-                        All the text and elements in this popup should be editable and dragable
-                      </h1>
-                      <input
-                        class="tw-w-full tw-bg-white tw-rounded tw-p-4 tw-mt-4"
-                        type="email"
-                        placeholder="E-mail"
-                        name="email"
-                        id="email"
-                      />
-                      <button
-                          type="reset"
-                          class="tw-w-full tw-flex tw-justify-center tw-bg-black tw-rounded-lg tw-font-semibold tw-text-white hover:tw-bg-black-bg1 tw-p-4 tw-mt-4"
-                      >
-                          <span>Signup Now </span>
-                      </button>
-                      <p class="tw-text-white tw-text-center tw-text-sm tw-mt-2">
+                      <div draggable="true">
+                        <div id="headerText" contentEditable="true" class="tw-relative tw-top-[85px] tw-h-[95px] tw-w-[355px]">
+                          <p class="tw-absolute tw-h-[95px] tw-w-[355px] tw-text-white tw-text-lg xs:tw-text-2xl tw-font-bold tw-text-center">
+                            All the text and elements in this popup should be editable and draggable
+                          </p>
+                        </div>
+                        </div>
+                      <div draggable="true" class="tw-absolute tw-top-[200px] tw-h-[55px] tw-w-[355px]">                      
+                        <input
+                          class="tw-w-full tw-h-full tw-bg-white tw-rounded-lg tw-px-4"
+                          type="email"
+                          placeholder="E-mail"
+                          name="email"
+                          id="email"
+                        />
+                      </div>
+                      <div draggable="true" class="tw-absolute tw-top-[270px] tw-h-[55px] tw-w-[355px]">                      
+                        <button
+                            contentEditable="true"
+                            type="reset"
+                            class="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-bg-black tw-rounded-lg tw-font-semibold tw-text-white hover:tw-bg-black-bg1"
+                        >
+                            <span>Signup Now</span>
+                        </button>
+                      </div>
+                      <p draggable="true" contentEditable="true" class="tw-absolute tw-top-[320px] tw-h-[25px] tw-w-[355px] tw-text-white tw-text-center tw-text-sm tw-mt-2">
                         No credit card required. No surprises
                       </p>
                     </div>
                   </form>`
   },
   {
+    id: 2,
     templateImage: template2,
     previewHTML: `<form">
                     <div class="tw-flex tw-flex-col tw-items-center tw-bg-white tw-py-1">
@@ -64,19 +79,21 @@ const templates = reactive([
                           </g>
                         </svg>
                       </div>
-                      <p class="tw-text-sm tw-font-bold tw-text-gray">Temi Kara</p>
+                      <p draggable="true" contentEditable="true" class="tw-text-sm tw-font-bold tw-text-gray">Temi Kara</p>
                     </div>
-                    <div class="tw-w-[450px] tw-h-[450px] tw-bg-red tw-px-20 tw-py-32">
+                    <div class="tw-max-w-[450px] tw-h-[450px] tw-bg-red tw-px-8 sm:tw-px-20 tw-py-32">
                       <div class="tw-flex tw-flex-col">
-                        <h1 class="tw-text-white tw-text-xl tw-font-bold tw-text-center tw-m-auto">
+                        <h1 draggable="true" contentEditable="true" class="tw-text-white tw-text-xl tw-font-bold tw-text-center tw-m-auto">
                           We're excited to announce we're now doing XYZ
                         </h1>
-                        <p class="tw-text-white tw-text-md tw-text-center tw-mt-6">
+                        <p draggable="true" contentEditable="true" class="tw-text-white tw-text-md tw-text-center tw-mt-6">
                           Click below to get the full story
                         </p>
                       </div>
                       <button
                           type="reset"
+                          draggable="true" 
+                          contentEditable="true"
                           class="tw-w-full tw-flex tw-justify-center tw-bg-white tw-rounded-lg tw-font-semibold tw-text-red hover:tw-text-red hover:tw-bg-red-bg1 tw-p-4 tw-mt-4"
                       >
                           <span>Show More</span>

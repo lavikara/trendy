@@ -1,5 +1,8 @@
 <template>
   <div id="homeview">
+    <nav>
+      <TopNavbar />
+    </nav>
     <main class="container tw-px-4 tw-py-28 lg:tw-py-44">
       <HeroSection />
     </main>
@@ -7,6 +10,7 @@
 </template>
 
 <script setup>
+import TopNavbar from '@/layout/navigation/TopNavbar.vue'
 import HeroSection from '@/layout/homePage/HeroSection.vue'
 </script>
 

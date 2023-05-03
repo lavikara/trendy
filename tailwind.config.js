@@ -21,11 +21,13 @@ module.exports = {
         yellow: {
           DEFAULT: '#dbbe65',
           bg1: '#e9dea7',
-          bg2: '#e9dea7'
+          bg2: '#fdfcf7'
         },
         orange: { DEFAULT: '#C06C00', bg1: '#ffedd6', bg2: '#E95F5B' },
         gray: {
-          DEFAULT: '#8791A7'
+          DEFAULT: '#8791A7',
+          bg1: '#F6F6EB',
+          bg2: '#D9DCE8'
         },
         black: {
           DEFAULT: '#1B1B1A',
@@ -53,7 +55,7 @@ module.exports = {
         //   lightest3: '#323E67',
         //   black: '#020B27',
         //   black2: '#222735',
-        //   bg1: '#4F5877',
+        // bg1: '#4F5877',
         //   bg2: '#1A2139',
         //   bg3: '#F6F6EB',
         //   bg4: '#EFEFEF',

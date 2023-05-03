@@ -20,7 +20,7 @@
                   title="Edit"
                   :btnStyle="editBtnStyle"
                   class="tw-max-w-[200px] tw-mx-auto tw-mt-4"
-                  @click="router.push({ name: 'CustomizeView' })"
+                  @click="editPopup($event, template.id)"
                 />
               </template>
             </PopupModal>
@@ -56,6 +56,12 @@ defineProps({
     default: () => []
   }
 })
+
+const editPopup = (event, id) => {
+  const template = event.target.offsetParent.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
+  localStorage.setItem('currentTemplate', JSON.stringify(template.innerHTML))
+  router.push({ name: 'CustomizeView', params: { id } })
+}
 
 const toggleShowModal = (index) => {
   showModal.value = true

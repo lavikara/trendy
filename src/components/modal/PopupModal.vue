@@ -5,7 +5,7 @@
     @click="$emit('close')"
   >
     <div class="container">
-      <div class="card tw-h-[450px] tw-max-w-[450px] tw-rounded-">
+      <div class="card tw-h-[450px] tw-max-w-[450px] tw-px-2">
         <div @click.stop>
           <slot name="content">content</slot>
         </div>
