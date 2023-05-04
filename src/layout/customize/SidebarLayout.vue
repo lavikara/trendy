@@ -1,9 +1,8 @@
 <template>
   <div id="sidebar-layout">
-    <div class="sidebar tw-overflow-scroll tw-px-8 tw-py-12">
+    <div class="sidebar tw-h-screen tw-overflow-scroll tw-bg-gray-bg2 tw-px-8 tw-py-12">
       <DropDown header="Style Settings" />
       <DropDown header="Add Elements" />
-      <DropDown header="Input Fields" />
     </div>
   </div>
 </template>

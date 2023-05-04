@@ -3,12 +3,12 @@
     <button
       ref="backBtnEl"
       @click="$router.go(-1)"
-      class="tw-w-9 tw-h-9 tw-rounded-full tw-flex tw-items-center"
+      class="tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-shadow-md"
       :style="btnStyle"
       @mouseover="setHoverStyle"
       @mouseleave="resetStyle"
     >
-      <img src="@/assets/img/arrow-back.svg" alt="arrow" />
+      <img class="tw-ml-1.5" src="@/assets/img/arrow-back.svg" alt="back" />
     </button>
   </div>
 </template>

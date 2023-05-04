@@ -10,9 +10,16 @@
     <div class="space"></div>
     <div class="space"></div>
     <transition name="dropdown" @enter="enter" @after-enter="afterEnter" @leave="leave">
-      <p class="tw-px-4" v-show="toggleSidebar">
-        <ColorPallet v-if="header === 'Style Settings'" />
-      </p>
+      <div class="tw-px-4" v-show="toggleSidebar">
+        <div v-if="header === 'Style Settings'">
+          <ColorPallet />
+        </div>
+        <div v-if="header === 'Add Elements'" class="tw-grid tw-grid-cols-3">
+          <AddElement title="Text" :image="TextIcon" action="addText" />
+          <AddElement title="Image" :image="ImageIcon" action="addImage" />
+          <AddElement title="Button" :image="ButtonIcon" action="addButton" />
+        </div>
+      </div>
     </transition>
     <div class="space"></div>
     <div class="space"></div>
@@ -22,6 +29,10 @@
 <script setup>
 import { ref } from 'vue'
 import ColorPallet from './ColorPallet.vue'
+import AddElement from './AddElement.vue'
+import TextIcon from '@/assets/img/texticon.png'
+import ImageIcon from '@/assets/img/imageicon.png'
+import ButtonIcon from '@/assets/img/buttonicon.png'
 
 defineProps({
   header: String
