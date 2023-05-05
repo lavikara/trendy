@@ -34,15 +34,15 @@ const templates = reactive([
                         </svg>
                       </div>
                       <div draggable="true" class="tw-absolute tw-top-[85px] tw-cursor-move">
-                        <div id="headerText" class="tw-h-[95px] tw-w-[355px]">
-                          <p contentEditable="false" class="tw-h-[95px] tw-w-[355px] tw-text-white tw-text-lg xs:tw-text-2xl tw-font-bold tw-text-center">
+                        <div id="headerText" class="tw-h-full tw-w-[355px]">
+                          <p contentEditable="false" class="tw-h-full tw-w-[355px] tw-text-white tw-text-lg xs:tw-text-2xl tw-font-bold tw-text-center">
                             All the text and elements in this popup should be editable and draggable
                           </p>
                         </div>
                       </div>
-                      <div draggable="true" class="tw-absolute tw-top-[200px] tw-h-[55px] tw-w-[355px] tw-cursor-move">                      
+                      <div draggable="true" class="tw-absolute tw-top-[200px] tw-h-min tw-w-[355px] tw-cursor-move">                      
                         <input
-                          class="tw-w-full tw-h-full tw-bg-white tw-rounded-lg tw-px-4"
+                          class="tw-w-full tw-h-full tw-bg-white tw-rounded-lg tw-p-4"
                           type="email"
                           placeholder="E-mail"
                           name="email"
@@ -58,7 +58,7 @@ const templates = reactive([
                             <span>Signup Now</span>
                         </button>
                       </div>
-                      <p draggable="true" contentEditable="false" class="tw-absolute tw-top-[320px] tw-h-[25px] tw-w-[355px] tw-text-white tw-text-center tw-text-sm tw-cursor-move tw-mt-2">
+                      <p draggable="true" contentEditable="false" class="tw-absolute tw-top-[320px] tw-h-min tw-w-[355px] tw-text-white tw-text-center tw-text-sm tw-cursor-move tw-mt-2">
                         No credit card required. No surprises
                       </p>
                     </div>
