@@ -1,7 +1,7 @@
 <template>
   <div
     id="popup-modal"
-    class="tw-fixed tw-top-0 tw-left-0 tw-right-0 tw-w-full tw-h-screen tw-right-0"
+    class="tw-fixed tw-top-0 tw-left-0 tw-right-0 tw-w-full tw-h-screen tw-right-0 tw-z-50"
     @click="$emit('close')"
   >
     <div class="container">

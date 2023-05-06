@@ -7,13 +7,13 @@
       <div
         v-for="(template, index) in templates"
         :key="index + template.templateImage"
-        @click="toggleShowModal(index)"
+        @click="toggleDefaultShowModal(index)"
         class="tw-cursor-pointer"
       >
         <img :src="template.templateImage" class="md:tw-h-full" alt="template" />
-        <div v-if="showModal && previewIndex === index">
+        <div v-if="showDefaultPreviewModal && defaultPreviewIndex === index">
           <Teleport to="#teleport-modal">
-            <PopupModal class="" @close="closeModal">
+            <PopupModal class="" @close="closeDefaultPreviewModal">
               <template v-slot:content>
                 <div v-html="template.previewHTML"></div>
                 <div class="tw-flex tw-justify-center tw-mt-4">
@@ -21,14 +21,14 @@
                     :btnStyle="backBtnStyle"
                     :icon="editicon"
                     alt="save"
-                    @click="editPopup($event)"
+                    @click="editDefaultPopup($event)"
                   />
                   <IconBtn
                     :btnStyle="backBtnStyle"
                     :icon="closeicon"
                     class="tw-ml-4"
                     alt="save"
-                    @click="closeModal"
+                    @click="closeDefaultPreviewModal"
                   />
                 </div>
               </template>
@@ -37,15 +37,49 @@
         </div>
       </div>
     </div>
-    <div v-if="savedTemplate" class="tw-mt-20">
+    <div class="tw-mt-20">
       <h1 class="tw-text-lg tw-font-bold tw-text-gray tw-text-center tw-mb-12">Saved Template</h1>
-      <div v-html="savedTemplate"></div>
+      <!-- <div ref="savedTemplatesRef" class="tw-grid tw-grid-cols-2 tw-gap-4"></div> -->
+      <div class="tw-grid md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-8">
+        <div
+          v-for="(template, index) in savedTemplate"
+          :key="index + template.templateImage"
+          @click="toggleSavedShowModal(index)"
+          class="tw-cursor-pointer"
+        >
+          <img :src="template.templateImage" class="md:tw-h-full" alt="template" />
+          <div v-if="showSavedPreviewModal && savedPreviewIndex === index">
+            <Teleport to="#teleport-modal">
+              <PopupModal class="" @close="closeSavedPreviewModal">
+                <template v-slot:content>
+                  <div v-html="template.previewHTML"></div>
+                  <div class="tw-relative tw-flex tw-justify-center tw-mt-4 tw-z-50">
+                    <IconBtn
+                      :btnStyle="backBtnStyle"
+                      :icon="editicon"
+                      alt="save"
+                      @click="editSavedPopup($event, template.id)"
+                    />
+                    <IconBtn
+                      :btnStyle="backBtnStyle"
+                      :icon="closeicon"
+                      class="tw-ml-4"
+                      alt="save"
+                      @click="closeSavedPreviewModal"
+                    />
+                  </div>
+                </template>
+              </PopupModal>
+            </Teleport>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import PopupModal from '@/components/modal/PopupModal.vue'
 import IconBtn from '@/components/general/IconBtn.vue'
@@ -55,9 +89,10 @@ import storage from '@/utils/storage.js'
 
 const router = useRouter()
 
-let showModal = ref(false)
-let previewIndex = ref(null)
-const savedTemplate = ref(null)
+let showDefaultPreviewModal = ref(false)
+let showSavedPreviewModal = ref(false)
+let defaultPreviewIndex = ref(null)
+let savedPreviewIndex = ref(null)
 
 const backBtnStyle = reactive({
   backgroundColor: '#FAF9F6',
@@ -72,94 +107,45 @@ defineProps({
   }
 })
 
-onMounted(() => {
-  renderSavedTemplate()
+const savedTemplate = computed(() => {
+  return storage.getItem('editedTemplate')
 })
 
-const renderSavedTemplate = () => {
-  savedTemplate.value = storage.getItem('editedTemplate')
-}
+onMounted(() => {
+  !storage.getItem('editedTemplate') ? storage.setItem('editedTemplate', []) : ''
+})
 
-const editPopup = (event) => {
+const editDefaultPopup = (event) => {
+  const id = Date.now()
   const template = event.target.offsetParent.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
   storage.setItem('currentTemplate', template.innerHTML)
-  router.push({ name: 'CustomizeView' })
+  router.push({ name: 'CustomizeView', params: { id } })
 }
 
-const toggleShowModal = (index) => {
-  showModal.value = true
-  previewIndex.value = index
+const editSavedPopup = (event, id) => {
+  const template =
+    event.target.offsetParent.offsetParent.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
+  storage.setItem('currentTemplate', template.innerHTML)
+  router.push({ name: 'CustomizeView', params: { id } })
 }
-const closeModal = () => {
-  showModal.value = false
+
+const toggleDefaultShowModal = (index) => {
+  showDefaultPreviewModal.value = true
+  defaultPreviewIndex.value = index
+}
+
+const toggleSavedShowModal = (index) => {
+  showSavedPreviewModal.value = true
+  savedPreviewIndex.value = index
+}
+
+const closeDefaultPreviewModal = () => {
+  showDefaultPreviewModal.value = false
+}
+
+const closeSavedPreviewModal = () => {
+  showSavedPreviewModal.value = false
 }
 </script>
 
 <style lang="scss" scoped></style>
-
-<!-- let draggableElem = document.getElementById("draggable-elem");
-let initialX = 0,
-  initialY = 0;
-let moveElement = false;
-//Events Object
-let events = {
-  mouse: {
-    down: "mousedown",
-    move: "mousemove",
-    up: "mouseup",
-  },
-  touch: {
-    down: "touchstart",
-    move: "touchmove",
-    up: "touchend",
-  },
-};
-let deviceType = "";
-//Detech touch device
-const isTouchDevice = () => {
-  try {
-    //We try to create TouchEvent (it would fail for desktops and throw error)
-    document.createEvent("TouchEvent");
-    deviceType = "touch";
-    return true;
-  } catch (e) {
-    deviceType = "mouse";
-    return false;
-  }
-};
-isTouchDevice();
-//Start (mouse down / touch start)
-draggableElem.addEventListener(events[deviceType].down, (e) => {
-  e.preventDefault();
-  //initial x and y points
-  initialX = !isTouchDevice() ? e.clientX : e.touches[0].clientX;
-  initialY = !isTouchDevice() ? e.clientY : e.touches[0].clientY;
-  //Start movement
-  moveElement = true;
-});
-//Move
-draggableElem.addEventListener(events[deviceType].move, (e) => {
-  //if movement == true then set top and left to new X andY while removing any offset
-  if (moveElement) {
-    e.preventDefault();
-    let newX = !isTouchDevice() ? e.clientX : e.touches[0].clientX;
-    let newY = !isTouchDevice() ? e.clientY : e.touches[0].clientY;
-    draggableElem.style.top =
-      draggableElem.offsetTop - (initialY - newY) + "px";
-    draggableElem.style.left =
-      draggableElem.offsetLeft - (initialX - newX) + "px";
-    initialX = newX;
-    initialY = newY;
-  }
-});
-//mouse up / touch end
-draggableElem.addEventListener(
-  events[deviceType].up,
-  (stopMovement = (e) => {
-    moveElement = false;
-  })
-);
-draggableElem.addEventListener("mouseleave", stopMovement);
-draggableElem.addEventListener(events[deviceType].up, (e) => {
-  moveElement = false;
-}); -->

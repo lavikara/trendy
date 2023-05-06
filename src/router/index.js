@@ -18,7 +18,7 @@ const router = createRouter({
       component: TemplateView
     },
     {
-      path: '/customize',
+      path: '/customize/:id',
       name: 'CustomizeView',
       component: CustomizeView
     },
