@@ -85,7 +85,7 @@ import PopupModal from '@/components/modal/PopupModal.vue'
 import IconBtn from '@/components/general/IconBtn.vue'
 import editicon from '@/assets/img/edit.png'
 import closeicon from '@/assets/img/close.png'
-import storage from '@/utils/storage.js'
+import { getItem, setItem } from '@/utils/storage.js'
 
 const router = useRouter()
 
@@ -108,24 +108,24 @@ defineProps({
 })
 
 const savedTemplate = computed(() => {
-  return storage.getItem('editedTemplate')
+  return getItem('editedTemplate')
 })
 
 onMounted(() => {
-  !storage.getItem('editedTemplate') ? storage.setItem('editedTemplate', []) : ''
+  !getItem('editedTemplate') ? setItem('editedTemplate', []) : ''
 })
 
 const editDefaultPopup = (event) => {
   const id = Date.now()
   const template = event.target.offsetParent.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
-  storage.setItem('currentTemplate', template.innerHTML)
+  setItem('currentTemplate', template.innerHTML)
   router.push({ name: 'CustomizeView', params: { id } })
 }
 
 const editSavedPopup = (event, id) => {
   const template =
     event.target.offsetParent.offsetParent.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
-  storage.setItem('currentTemplate', template.innerHTML)
+  setItem('currentTemplate', template.innerHTML)
   router.push({ name: 'CustomizeView', params: { id } })
 }
 

@@ -26,7 +26,6 @@
         >
           <ImageGallary @imageSelected="setImageElement" />
         </div>
-        <div v-if="vShow" id="canvas"></div>
       </main>
     </div>
   </div>
@@ -40,7 +39,8 @@ import BackBtn from '@/components/general/BackBtn.vue'
 import IconBtn from '@/components/general/IconBtn.vue'
 import SidebarLayout from '@/layout/customize/SidebarLayout.vue'
 import ImageGallary from '@/layout/customize/ImageGallary.vue'
-import storage from '@/utils/storage.js'
+import { getItem, setItem } from '@/utils/storage.js'
+import { searchArray } from '@/utils/helpers'
 import templates from '@/utils/templates.js'
 import saveicon from '@/assets/img/saveicon.png'
 import template1 from '@/assets/img/template.png'
@@ -51,7 +51,6 @@ const route = useRoute()
 let dropZone = ref()
 let template = ref(null)
 let target = ref(null)
-let vShow = ref(true)
 let showImageGallary = ref(false)
 let deviceType = ref('')
 let textElementCounter = ref(0)
@@ -93,7 +92,7 @@ onUnmounted(() => {
 onMounted(() => {
   isTouchDevice()
   renderTemplate()
-  !storage.getItem('editedTemplate') ? storage.setItem('editedTemplate', []) : ''
+  !getItem('editedTemplate') ? setItem('editedTemplate', []) : ''
 })
 
 const startDrag = (event) => {
@@ -117,19 +116,8 @@ const onDrop = (event) => {
   target.value = null
 }
 
-const isTouchDevice = () => {
-  try {
-    document.createEvent('TouchEvent')
-    deviceType.value = 'touch'
-    return true
-  } catch (e) {
-    deviceType.value = 'mouse'
-    return false
-  }
-}
-
 const renderTemplate = () => {
-  template.value = storage.getItem('currentTemplate')
+  template.value = getItem('currentTemplate')
   dropZone.value.insertAdjacentHTML('beforeend', template.value)
   addEvents()
 }
@@ -139,22 +127,22 @@ const saveTemplate = () => {
   let tempArray = []
   let payload = {}
   let id = route.params.id
-  storedTemplates = storage.getItem('editedTemplate')
+  storedTemplates = getItem('editedTemplate')
   removeActiveWrapper(activeElement.value, activeDragIcon.value)
   const templateContainer = document.getElementById('templateContainer')
   payload.id = id
   payload.templateImage = template1
   payload.previewHTML = templateContainer.outerHTML
-  const searchResult = search(id, storedTemplates)
+  const searchResult = searchArray(id, storedTemplates)
   if (searchResult) {
     tempArray.push(payload)
     newArray = storedTemplates.map(
       (template) => tempArray.find((temp) => temp.id === template.id) || template
     )
-    storage.setItem('editedTemplate', newArray)
+    setItem('editedTemplate', newArray)
   } else {
     storedTemplates.push(payload)
-    storage.setItem('editedTemplate', storedTemplates)
+    setItem('editedTemplate', storedTemplates)
   }
   alert('Template saved')
 }
@@ -204,14 +192,6 @@ const setActiveWrapper = (event) => {
   dragicon.style.visibility = 'visible'
 }
 
-let search = (idKey, myArray) => {
-  for (let i = 0; i < myArray.length; i++) {
-    if (myArray[i].id === idKey) {
-      return myArray[i]
-    }
-  }
-}
-
 const removeActiveWrapper = (element, dragIcon) => {
   const drag = document.getElementById(dragIcon)
   const activeElement = document.getElementById(element)
@@ -232,6 +212,17 @@ const addEvents = () => {
   editableContentArray.map((editableContent) => {
     editableContent.contentEditable = 'true'
   })
+}
+
+const isTouchDevice = () => {
+  try {
+    document.createEvent('TouchEvent')
+    deviceType.value = 'touch'
+    return true
+  } catch (e) {
+    deviceType.value = 'mouse'
+    return false
+  }
 }
 
 watch(templateBgColor, (value) => {
