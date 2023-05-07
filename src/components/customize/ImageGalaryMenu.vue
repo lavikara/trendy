@@ -2,14 +2,14 @@
   <div id="galary-menu" class="tw-flex tw-justify-between tw-bg-red tw-px-1 tw-pt-1">
     <div class="tw-flex">
       <div
-        class="tw-bg-red tw-cursor-pointer tw-rounded-t-lg tw-px-2 tw-py-1"
+        class="tw-cursor-pointer tw-rounded-t-lg tw-px-2 tw-py-1"
         :class="{ 'tw-bg-[#FAF9F6]': menu === 'upload' }"
         @click="setBgColor('upload')"
       >
         <UploadIcon />
       </div>
       <div
-        class="tw-bg-red tw-cursor-pointer tw-rounded-t-lg tw-px-2 tw-py-1"
+        class="tw-cursor-pointer tw-rounded-t-lg tw-px-2 tw-py-1"
         :class="{ 'tw-bg-[#FAF9F6]': menu === 'picture' }"
         @click="setBgColor('picture')"
       >
