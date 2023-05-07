@@ -22,7 +22,7 @@
         />
         <div
           v-if="showImageGallary"
-          class="tw-absolute tw-top-auto tw-left-auto tw-h-3/6 tw-overflow-scroll tw-rounded-lg tw-bg-gray-bg2 tw-shadow-md tw-p-4 tw-mx-28 tw-z-50"
+          class="tw-absolute tw-top-auto tw-left-auto tw-w-2/4 tw-h-3/6 tw-overflow-scroll tw-rounded-lg tw-bg-gray-bg2 tw-shadow-md tw-z-50"
         >
           <ImageGallary @imageSelected="setImageElement" />
         </div>

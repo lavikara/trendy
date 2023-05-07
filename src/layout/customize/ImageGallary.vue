@@ -1,29 +1,37 @@
 <template>
-  <div id="image-galary">
-    <div class="tw-grid tw-grid-cols-4 tw-gap-4">
-      <div v-for="(image, index) in images" :key="index">
-        <img
-          :src="image"
-          :alt="'image' + index"
-          class="tw-w-full tw-h-[100px] tw-object-cover tw-rounded-lg tw-cursor-pointer"
-          @click="imageSelected(image)"
-        />
-      </div>
-    </div>
+  <div id="image-galary" class="tw-h-full">
+    <ImageGalaryMenu @selectMenu="updateComponent" />
+    <component :is="currentComponent" @imageSelected="imageSelected" />
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
-import image1 from '@/assets/img/image1.jpeg'
-import image2 from '@/assets/img/image2.jpeg'
+import { shallowRef } from 'vue'
+import StockImage from '@/components/customize/StockImage.vue'
+import ImageUpload from '@/components/customize/ImageUpload.vue'
+import ImageGalaryMenu from '@/components/customize/ImageGalaryMenu.vue'
 
 const emit = defineEmits(['imageSelected'])
 
-let images = reactive([image1, image2])
+let currentComponent = shallowRef(ImageUpload)
 
 const imageSelected = (image) => {
   emit('imageSelected', image)
+}
+
+const updateComponent = (menu) => {
+  switch (menu) {
+    case 'picture':
+      currentComponent.value = StockImage
+      break
+
+    case 'upload':
+      currentComponent.value = ImageUpload
+      break
+
+    default:
+      break
+  }
 }
 </script>
 
