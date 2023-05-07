@@ -1,8 +1,8 @@
 <template>
-  <div id="save-btn">
+  <div id="iconBtn">
     <button
       ref="iconBtnEl"
-      class="tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-shadow-md tw-p-3"
+      class="tw-rounded-full tw-flex tw-items-center tw-shadow-md"
       :style="btnStyle"
       @mouseover="setHoverStyle"
       @mouseleave="resetStyle"

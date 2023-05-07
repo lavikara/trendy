@@ -25,8 +25,18 @@ const emit = defineEmits(['imageSelected'])
 
 const previewImage = () => {
   const [file] = fileInput.value.files
-  if (file) currentImage.value = URL.createObjectURL(file)
-  emit('imageSelected', currentImage.value)
+  if (file) {
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = function () {
+      currentImage.value = reader.result
+      emit('imageSelected', currentImage.value)
+    }
+    reader.onerror = function (error) {
+      console.log('Error: ', error)
+      alert('an error occured')
+    }
+  }
 }
 </script>
 

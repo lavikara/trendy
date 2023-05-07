@@ -14,7 +14,7 @@
           class="tw-absolute tw--top-0 tw--left-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
         />
         <IconBtn
-          :btnStyle="backBtnStyle"
+          :btnStyle="saveBtnStyle"
           :icon="saveicon"
           alt="save"
           class="tw-absolute tw--top-0 tw--right-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
@@ -24,7 +24,10 @@
           v-if="showImageGallary"
           class="tw-absolute tw-top-auto tw-left-auto tw-w-2/4 tw-h-3/6 tw-overflow-scroll tw-rounded-lg tw-bg-gray-bg2 tw-shadow-md tw-z-50"
         >
-          <ImageGallary @imageSelected="setImageElement" />
+          <ImageGallary
+            @imageSelected="setImageElement"
+            @close="showImageGallary = !showImageGallary"
+          />
         </div>
       </main>
     </div>
@@ -66,6 +69,15 @@ const backBtnStyle = reactive({
   backgroundColor: '#FAF9F6',
   hoverColor: '#24419a',
   hoverBgColor: '#d7ceb6'
+})
+
+const saveBtnStyle = reactive({
+  backgroundColor: '#FAF9F6',
+  hoverColor: '#24419a',
+  hoverBgColor: '#d7ceb6',
+  width: '50px',
+  height: '50px',
+  padding: '12px'
 })
 
 const templateBgColor = computed(() => {

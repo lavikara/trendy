@@ -97,7 +97,10 @@ let savedPreviewIndex = ref(null)
 const backBtnStyle = reactive({
   backgroundColor: '#FAF9F6',
   hoverColor: '#24419a',
-  hoverBgColor: '#d7ceb6'
+  hoverBgColor: '#d7ceb6',
+  width: '50px',
+  height: '50px',
+  padding: '12px'
 })
 
 defineProps({

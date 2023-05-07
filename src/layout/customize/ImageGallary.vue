@@ -1,6 +1,6 @@
 <template>
   <div id="image-galary" class="tw-h-full">
-    <ImageGalaryMenu @selectMenu="updateComponent" />
+    <ImageGalaryMenu @selectMenu="updateComponent" @close="close" />
     <component :is="currentComponent" @imageSelected="imageSelected" />
   </div>
 </template>
@@ -11,12 +11,16 @@ import StockImage from '@/components/customize/StockImage.vue'
 import ImageUpload from '@/components/customize/ImageUpload.vue'
 import ImageGalaryMenu from '@/components/customize/ImageGalaryMenu.vue'
 
-const emit = defineEmits(['imageSelected'])
+const emit = defineEmits(['imageSelected', 'close'])
 
 let currentComponent = shallowRef(ImageUpload)
 
 const imageSelected = (image) => {
   emit('imageSelected', image)
+}
+
+const close = () => {
+  emit('close')
 }
 
 const updateComponent = (menu) => {
