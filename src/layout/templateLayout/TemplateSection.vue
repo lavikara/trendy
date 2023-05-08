@@ -13,7 +13,7 @@
         :previewIndex="defaultPreviewIndex"
         @click="toggleDefaultShowModal(index)"
         @closePreviewModal="closeDefaultPreviewModal"
-        @editPopup="editDefaultPopup"
+        @editPopup="editPopup"
       />
     </div>
     <div class="tw-mt-20">
@@ -28,7 +28,7 @@
           :previewIndex="savedPreviewIndex"
           @click="toggleSavedShowModal(index)"
           @closePreviewModal="closeSavedPreviewModal"
-          @editPopup="editSavedPopup"
+          @editPopup="editPopup"
         />
       </div>
     </div>
@@ -63,19 +63,12 @@ onMounted(() => {
   !getItem('editedTemplate') ? setItem('editedTemplate', []) : ''
 })
 
-const editDefaultPopup = (emitObj) => {
-  const id = Date.now()
+const editPopup = (emitObj) => {
+  const id = emitObj.templateId ? emitObj.templateId : Date.now()
   const template =
     emitObj.event.target.offsetParent.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
   setItem('currentTemplate', template.innerHTML)
   router.push({ name: 'CustomizeView', params: { id } })
-}
-
-const editSavedPopup = (emitObj) => {
-  const template =
-    emitObj.event.target.offsetParent.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
-  setItem('currentTemplate', template.innerHTML)
-  router.push({ name: 'CustomizeView', params: { id: emitObj.templateId } })
 }
 
 const toggleDefaultShowModal = (index) => {
