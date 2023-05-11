@@ -200,7 +200,13 @@ const setElement = (template) => {
 
 const setActiveWrapper = (event) => {
   zIndex.value++
-  if (event.target.id.includes('toolbar') || event.target.id.includes('dragicon')) return
+  if (
+    event.target.id.includes('toolbar') ||
+    event.target.id.includes('dragicon') ||
+    event.target.nodeName === 'path'
+  ) {
+    return
+  }
   if (event.target.parentNode.id === 'delete') {
     const element = event.target.parentNode.parentNode.parentNode.parentNode
     element.remove()
