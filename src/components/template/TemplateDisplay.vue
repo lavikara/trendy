@@ -28,6 +28,18 @@
   </div>
 </template>
 
+<!-- .wrapper .right::before {
+    position: absolute;
+    content: "";
+    height: 8px;
+    width: 8px;
+    background-color: #001140;
+    left: -0px;
+    top: 23%;
+    transform: translate(-50%) rotate(45deg);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  } -->
+
 <script setup>
 import { reactive } from 'vue'
 import PopupModal from '@/components/modal/PopupModal.vue'

@@ -59,6 +59,8 @@ let deviceType = ref('')
 let textElementCounter = ref(0)
 let activeElement = ref('')
 let activeDragIcon = ref('')
+let activeToolbar = ref('')
+let zIndex = ref(0)
 let storedTemplates = reactive([])
 let initial = reactive({
   x: 0,
@@ -98,7 +100,7 @@ const addButton = computed(() => {
 
 onUnmounted(() => {
   document.removeEventListener('dragstart', startDrag)
-  document.removeEventListener('focus', setActiveWrapper, true)
+  document.removeEventListener('click', setActiveWrapper)
 })
 
 onMounted(() => {
@@ -190,26 +192,44 @@ const setElement = (template) => {
   document.getElementById('newDrag').id === 'newDrag'
     ? (document.getElementById('newDrag').id = 'newDrag' + textElementCounter.value)
     : ''
+  document.getElementById('newToolbar').id === 'newToolbar'
+    ? (document.getElementById('newToolbar').id = 'newToolbar' + textElementCounter.value)
+    : ''
   addEvents()
 }
 
 const setActiveWrapper = (event) => {
-  if (activeElement.value !== '') removeActiveWrapper(activeElement.value, activeDragIcon.value)
+  zIndex.value++
+  if (event.target.id.includes('toolbar') || event.target.id.includes('dragicon')) return
+  if (event.target.parentNode.id === 'delete') {
+    const element = event.target.parentNode.parentNode.parentNode.parentNode
+    element.remove()
+    return
+  }
+  if (activeElement.value !== '') {
+    removeActiveWrapper(activeElement.value, activeDragIcon.value, activeToolbar.value)
+  }
   activeElement.value = event.target.id
   if (!event.target.nextElementSibling) return
   activeDragIcon.value = event.target.nextElementSibling.id
+  activeToolbar.value = event.target.nextElementSibling.nextElementSibling.id
   const dragicon = document.getElementById(activeDragIcon.value)
+  const toolbar = document.getElementById(activeToolbar.value)
   event.target.style.outline = 'none'
   event.target.style.border = '2px solid #d7ceb6'
+  event.target.parentNode.parentNode.style.zIndex = zIndex.value.toString()
   dragicon.style.visibility = 'visible'
+  toolbar.style.visibility = 'visible'
 }
 
-const removeActiveWrapper = (element, dragIcon) => {
-  const drag = document.getElementById(dragIcon)
+const removeActiveWrapper = (element, dragIcon, toolbar) => {
+  const activeDragIcon = document.getElementById(dragIcon)
   const activeElement = document.getElementById(element)
+  const activeToolbar = document.getElementById(toolbar)
   if (!activeElement) return
   activeElement.style.border = '0px dashed #d7ceb6'
-  drag.style.visibility = 'hidden'
+  activeDragIcon.style.visibility = 'hidden'
+  activeToolbar.style.visibility = 'hidden'
 }
 
 const addEvents = () => {

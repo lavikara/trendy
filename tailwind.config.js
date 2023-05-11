@@ -23,7 +23,8 @@ module.exports = {
         yellow: {
           DEFAULT: '#dbbe65',
           bg1: '#e9dea7',
-          bg2: '#fdfcf7'
+          bg2: '#fdfcf7',
+          bg3: '#d7ceb6'
         },
         orange: { DEFAULT: '#C06C00', bg1: '#ffedd6', bg2: '#E95F5B' },
         gray: {
