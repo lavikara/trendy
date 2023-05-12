@@ -2,22 +2,22 @@
   <div id="dropdown">
     <div
       @click="toggleSidebar = !toggleSidebar"
-      class="question tw-flex tw-justify-between tw-items-center tw-bg-red tw-rounded-lg tw-cursor-pointer tw-px-8 tw-py-3"
+      class="tw-flex tw-justify-between tw-items-center tw-bg-red tw-rounded-lg tw-cursor-pointer tw-px-4 xl:tw-px-8 tw-py-3"
     >
-      <span class="tw-text-white tw-text-sm tw-font-bold">{{ header }}</span>
+      <span class="tw-text-white tw-text-sm tw-font-bold tw-whitespace-nowrap">{{ header }}</span>
       <img src="@/assets/img/chevron-down.svg" alt="chevron" :class="{ open: toggleSidebar }" />
     </div>
     <div class="space"></div>
     <div class="space"></div>
     <transition name="dropdown" @enter="enter" @after-enter="afterEnter" @leave="leave">
-      <div class="tw-px-4" v-show="toggleSidebar">
+      <div v-show="toggleSidebar">
         <div v-if="header === 'Style Settings'">
           <ColorPallet />
         </div>
-        <div v-if="header === 'Add Elements'" class="tw-grid tw-grid-cols-3">
+        <div v-if="header === 'Add Elements'">
           <AddElement title="Text" :image="TextIcon" action="addText" />
-          <AddElement title="Image" :image="ImageIcon" action="addImage" />
-          <AddElement title="Button" :image="ButtonIcon" action="addButton" />
+          <AddElement title="Button" :image="ButtonIcon" action="addButton" class="tw-mt-12" />
+          <AddElement title="Image" :image="ImageIcon" action="addImage" class="tw-mt-12" />
         </div>
       </div>
     </transition>

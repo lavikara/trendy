@@ -5,8 +5,8 @@
       <main
         ref="dropZone"
         class="drop-zone tw-relative tw-h-screen tw-flex tw-justify-center tw-items-center tw-px-4 tw-py-28 lg:tw-pb-44 lg:tw-pt-32"
-        @drop="onDrop($event)"
-        @dragenter.prevent
+        @drop="onDrop"
+        @dragenter="onDragEnter"
         @dragover.prevent
       >
         <BackBtn
@@ -60,9 +60,14 @@ let textElementCounter = ref(0)
 let activeElement = ref('')
 let activeDragIcon = ref('')
 let activeToolbar = ref('')
+let cloneAble = ref('')
 let zIndex = ref(0)
 let storedTemplates = reactive([])
 let initial = reactive({
+  x: 0,
+  y: 0
+})
+let newCloneable = reactive({
   x: 0,
   y: 0
 })
@@ -110,6 +115,8 @@ onMounted(() => {
 })
 
 const startDrag = (event) => {
+  console.log(event)
+  event.target.id === 'cloneable' ? (cloneAble.value = event.target.id) : ''
   if (event.target.nodeName === 'IMG') return
   target.value = event.target
   event.dataTransfer.dropEffect = 'move'
@@ -118,15 +125,47 @@ const startDrag = (event) => {
   initial.y = !isTouchDevice() ? event.clientY : event.touches[0].clientY
 }
 
+const onDragEnter = (event) => {
+  newCloneable.x = !isTouchDevice() ? event.clientX : event.touches[0].clientX
+  newCloneable.y = !isTouchDevice() ? event.clientY : event.touches[0].clientY
+}
+
 const onDrop = (event) => {
+  console.log(event)
+  textElementCounter.value = Date.now()
+  if (cloneAble.value !== '') {
+    const element = document.getElementById(cloneAble.value)
+    const clone = element.cloneNode(true)
+    clone.id = 'cloneable' + textElementCounter.value
+    clone.lastChild.id = 'cloneableOverlay' + textElementCounter.value
+    clone.firstChild.firstChild.id = 'cloneableNewElement' + textElementCounter.value
+    clone.firstChild.firstChild.nextElementSibling.id =
+      'cloneableNewDrag' + textElementCounter.value
+    clone.firstChild.firstChild.nextElementSibling.nextElementSibling.id =
+      'cloneableNewToolbar' + textElementCounter.value
+    const addElement = document.getElementById('add-element')
+    addElement.insertAdjacentHTML('beforeend', element.outerHTML)
+    element.remove()
+    let newX = !isTouchDevice() ? event.clientX : event.touches[0].clientX
+    let newY = !isTouchDevice() ? event.clientY : event.touches[0].clientY
+    if (!target.value) return
+    clone.style.position = 'absolute'
+    clone.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
+    clone.style.left = target.value.offsetLeft - (newCloneable.x - newX) + 'px'
+    target.value = null
+    const templateContainer = document.getElementById('templateContainer')
+    templateContainer.insertAdjacentHTML('beforeend', clone.outerHTML)
+    document.getElementById(clone.lastChild.id).remove()
+    addEvents()
+    cloneAble.value = ''
+    return
+  }
   let newX = !isTouchDevice() ? event.clientX : event.touches[0].clientX
   let newY = !isTouchDevice() ? event.clientY : event.touches[0].clientY
   if (!target.value) return
   target.value.style.position = 'absolute'
   target.value.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
   target.value.style.left = target.value.offsetLeft - (initial.x - newX) + 'px'
-  initial.x = newX
-  initial.y = newY
   target.value = null
 }
 
@@ -200,6 +239,7 @@ const setElement = (template) => {
 
 const setActiveWrapper = (event) => {
   zIndex.value++
+  if (event.target.parentNode.id === 'cloneable') return
   if (
     event.target.id.includes('toolbar') ||
     event.target.id.includes('dragicon') ||
@@ -215,6 +255,7 @@ const setActiveWrapper = (event) => {
   if (activeElement.value !== '') {
     removeActiveWrapper(activeElement.value, activeDragIcon.value, activeToolbar.value)
   }
+
   activeElement.value = event.target.id
   if (!event.target.nextElementSibling) return
   activeDragIcon.value = event.target.nextElementSibling.id
