@@ -1,36 +1,39 @@
 <template>
-  <div id="customizeview">
-    <SidebarLayout />
-    <div class="container tw-h-screen">
-      <main
-        ref="dropZone"
-        class="drop-zone tw-relative tw-h-screen tw-flex tw-justify-center tw-items-center tw-px-4 tw-py-28 lg:tw-pb-44 lg:tw-pt-32"
-        @drop="onDrop($event)"
-        @dragenter.prevent
-        @dragover.prevent
-      >
-        <BackBtn
-          :btnStyle="backBtnStyle"
-          class="tw-absolute tw--top-0 tw--left-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
-        />
-        <IconBtn
-          :btnStyle="saveBtnStyle"
-          :icon="saveicon"
-          alt="save"
-          class="tw-absolute tw--top-0 tw--right-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
-          @click="saveTemplate"
-        />
-        <div
-          v-if="showImageGallary"
-          class="tw-absolute tw-top-auto tw-left-auto tw-w-2/4 tw-h-3/6 tw-overflow-scroll tw-rounded-lg tw-bg-gray-bg2 tw-shadow-md tw-z-50"
+  <div id="customizeview" class="tw-flex tw-h-full tw-bg-fixed tw-bg-no-repeat tw-bg-cover">
+    <ElementSidebarLayout />
+    <div class="container tw-w-full tw-bg-black">
+      <div class="tw-h-screen tw-w-full">
+        <main
+          ref="dropZone"
+          class="drop-zone tw-relative tw-h-screen tw-flex tw-justify-center tw-items-center tw-px-4 tw-py-28 lg:tw-pb-44 lg:tw-pt-32"
+          @drop="onDrop"
+          @dragenter="onDragEnter"
+          @dragover.prevent
         >
-          <ImageGallary
-            @imageSelected="setImageElement"
-            @close="showImageGallary = !showImageGallary"
+          <BackBtn
+            :btnStyle="backBtnStyle"
+            class="tw-absolute tw--top-0 tw--left-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
           />
-        </div>
-      </main>
+          <IconBtn
+            :btnStyle="saveBtnStyle"
+            :icon="saveicon"
+            alt="save"
+            class="tw-absolute tw--top-0 tw--right-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
+            @click="saveTemplate"
+          />
+          <div
+            v-if="showImageGallary"
+            class="tw-absolute tw-top-auto tw-left-auto tw-w-2/4 tw-h-3/6 tw-overflow-scroll tw-rounded-lg tw-bg-gray-bg2 tw-shadow-md tw-z-50"
+          >
+            <ImageGallary
+              @imageSelected="setImageElement"
+              @close="showImageGallary = !showImageGallary"
+            />
+          </div>
+        </main>
+      </div>
     </div>
+    <StylesSidebarLayout />
   </div>
 </template>
 
@@ -40,7 +43,8 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import BackBtn from '@/components/general/BackBtn.vue'
 import IconBtn from '@/components/general/IconBtn.vue'
-import SidebarLayout from '@/layout/customize/SidebarLayout.vue'
+import StylesSidebarLayout from '@/layout/customize/StylesSidebarLayout.vue'
+import ElementSidebarLayout from '@/layout/customize/ElementSidebarLayout.vue'
 import ImageGallary from '@/layout/customize/ImageGallary.vue'
 import { getItem, setItem } from '@/utils/storage.js'
 import { searchArray } from '@/utils/helpers'
@@ -60,21 +64,26 @@ let textElementCounter = ref(0)
 let activeElement = ref('')
 let activeDragIcon = ref('')
 let activeToolbar = ref('')
+let cloneAble = ref('')
 let zIndex = ref(0)
 let storedTemplates = reactive([])
 let initial = reactive({
   x: 0,
   y: 0
 })
+let newCloneable = reactive({
+  x: 0,
+  y: 0
+})
 
 const backBtnStyle = reactive({
-  backgroundColor: '#FAF9F6',
+  backgroundColor: '#FFFFFF',
   hoverColor: '#24419a',
   hoverBgColor: '#d7ceb6'
 })
 
 const saveBtnStyle = reactive({
-  backgroundColor: '#FAF9F6',
+  backgroundColor: '#FFFFFF',
   hoverColor: '#24419a',
   hoverBgColor: '#d7ceb6',
   width: '50px',
@@ -110,6 +119,7 @@ onMounted(() => {
 })
 
 const startDrag = (event) => {
+  event.target.id.includes('clone') ? (cloneAble.value = event.target.id) : ''
   if (event.target.nodeName === 'IMG') return
   target.value = event.target
   event.dataTransfer.dropEffect = 'move'
@@ -118,15 +128,46 @@ const startDrag = (event) => {
   initial.y = !isTouchDevice() ? event.clientY : event.touches[0].clientY
 }
 
+const onDragEnter = (event) => {
+  newCloneable.x = !isTouchDevice() ? event.clientX : event.touches[0].clientX
+  newCloneable.y = !isTouchDevice() ? event.clientY : event.touches[0].clientY
+}
+
 const onDrop = (event) => {
+  textElementCounter.value = Date.now()
+  if (cloneAble.value !== '') {
+    const element = document.getElementById(cloneAble.value)
+    element.cloneNode(true)
+    const addElement = document.getElementById('add-element')
+    addElement.insertAdjacentHTML('beforeend', element.outerHTML)
+    element.remove()
+    if (element.id === 'cloneText') setElement(templates.textTemplate)
+    if (element.id === 'cloneButton') setElement(templates.buttonTemplate)
+    if (element.id === 'cloneImage') {
+      showImageGallary.value = !showImageGallary.value
+      target.value = null
+      cloneAble.value = ''
+      return
+    }
+
+    const newDragTemplate = (document.getElementById('newDragTemplate').id =
+      'newDragTemplate' + textElementCounter.value)
+    const updatedTemplateId = document.getElementById(newDragTemplate)
+    let newX = !isTouchDevice() ? event.clientX : event.touches[0].clientX
+    let newY = !isTouchDevice() ? event.clientY : event.touches[0].clientY
+    updatedTemplateId.style.position = 'absolute'
+    updatedTemplateId.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
+    updatedTemplateId.style.left = target.value.offsetLeft - (initial.x - newX) + 'px'
+    target.value = null
+    cloneAble.value = ''
+    return
+  }
   let newX = !isTouchDevice() ? event.clientX : event.touches[0].clientX
   let newY = !isTouchDevice() ? event.clientY : event.touches[0].clientY
   if (!target.value) return
   target.value.style.position = 'absolute'
   target.value.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
   target.value.style.left = target.value.offsetLeft - (initial.x - newX) + 'px'
-  initial.x = newX
-  initial.y = newY
   target.value = null
 }
 
@@ -173,7 +214,23 @@ const setImageElement = (image) => {
   document.getElementById('newDrag').id === 'newDrag'
     ? (document.getElementById('newDrag').id = 'newDrag' + textElementCounter.value)
     : ''
+  document.getElementById('newToolbar').id === 'newToolbar'
+    ? (document.getElementById('newToolbar').id = 'newToolbar' + textElementCounter.value)
+    : ''
   showImageGallary.value = !showImageGallary.value
+  // if (cloneAble.value === 'cloneImage') {
+  //   const newDragTemplate = (document.getElementById('newDragTemplate').id =
+  //     'newDragTemplate' + textElementCounter.value)
+  //   const updatedTemplateId = document.getElementById(newDragTemplate)
+  //   let newX = !isTouchDevice() ? event.clientX : event.touches[0].clientX
+  //   let newY = !isTouchDevice() ? event.clientY : event.touches[0].clientY
+  //   updatedTemplateId.style.position = 'absolute'
+  //   updatedTemplateId.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
+  //   updatedTemplateId.style.left = target.value.offsetLeft - (initial.x - newX) + 'px'
+  //   target.value = null
+  //   cloneAble.value = ''
+  //   return
+  // }
   addEvents()
 }
 
@@ -200,6 +257,10 @@ const setElement = (template) => {
 
 const setActiveWrapper = (event) => {
   zIndex.value++
+  if (event.target.id === 'textSvg' && event.type === 'click') return
+  if (event.target.id === 'buttonSvg' && event.type === 'click') return
+  if (event.target.id === 'imageSvg' && event.type === 'click') return
+  if (event.target.parentNode.id === 'cloneable') return
   if (
     event.target.id.includes('toolbar') ||
     event.target.id.includes('dragicon') ||
@@ -283,10 +344,9 @@ watch(addButton, () => {
 <style lang="scss" scoped>
 #customizeview {
   @include fadeIn;
-  height: 100%;
-  display: flex;
+  background: url(@/assets/img/background.avif);
   .container {
-    width: 100%;
+    background-color: $opaque-bg;
 
     @media screen and (min-width: 1280px) {
       width: calc(100% - #{$side-bar-width});

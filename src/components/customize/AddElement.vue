@@ -1,11 +1,19 @@
 <template>
-  <div id="add-element">
+  <div class="tw-relative tw-flex tw-justify-center tw-items-center">
     <div
-      class="tw-w-24 tw-h-24 tw-flex tw-flex-col tw-justify-center tw-items-center tw-bg-white tw-rounded-full tw-shadow-md tw-cursor-pointer tw-mx-auto"
-      @click="state++"
+      id="add-element"
+      class="tw-bg-black tw-rounded-full tw-shadow-md tw-cursor-grab tw-p-2"
+      @dblclick="state++"
     >
-      <img :src="image" class="tw-w-12" alt="template" />
-      <p class="tw-text-sm">{{ title }}</p>
+      <div id="cloneText" draggable="true">
+        <TextIcon v-show="title === 'Text'" />
+      </div>
+      <div id="cloneButton" draggable="true">
+        <ButtonIcon v-show="title === 'Button'" />
+      </div>
+      <div id="cloneImage" draggable="true">
+        <ImageIcon v-show="title === 'Image'" />
+      </div>
     </div>
   </div>
 </template>
@@ -13,12 +21,14 @@
 <script setup>
 import { ref, watchEffect } from 'vue'
 import { useStore } from 'vuex'
+import ButtonIcon from '@/components/icons/ButtonIcon.vue'
+import TextIcon from '@/components/icons/TextIcon.vue'
+import ImageIcon from '@/components/icons/ImageIcon.vue'
 
 const store = useStore()
 
 const props = defineProps({
   title: String,
-  image: String,
   action: String
 })
 

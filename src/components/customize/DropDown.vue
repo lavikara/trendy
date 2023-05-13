@@ -2,22 +2,23 @@
   <div id="dropdown">
     <div
       @click="toggleSidebar = !toggleSidebar"
-      class="question tw-flex tw-justify-between tw-items-center tw-bg-red tw-rounded-lg tw-cursor-pointer tw-px-8 tw-py-3"
+      class="tw-flex tw-justify-between tw-items-center tw-bg-black tw-rounded-lg tw-cursor-pointer tw-px-2 lg:tw-px-6 xl:tw-px-8 tw-py-3"
     >
-      <span class="tw-text-white tw-text-sm tw-font-bold">{{ header }}</span>
+      <span class="tw-text-white tw-text-xs tw-font-bold">{{ header }}</span>
       <img src="@/assets/img/chevron-down.svg" alt="chevron" :class="{ open: toggleSidebar }" />
     </div>
     <div class="space"></div>
     <div class="space"></div>
     <transition name="dropdown" @enter="enter" @after-enter="afterEnter" @leave="leave">
-      <div class="tw-px-4" v-show="toggleSidebar">
-        <div v-if="header === 'Style Settings'">
+      <div v-show="toggleSidebar">
+        <div v-if="header === 'Background Style'">
           <ColorPallet />
         </div>
-        <div v-if="header === 'Add Elements'" class="tw-grid tw-grid-cols-3">
-          <AddElement title="Text" :image="TextIcon" action="addText" />
-          <AddElement title="Image" :image="ImageIcon" action="addImage" />
-          <AddElement title="Button" :image="ButtonIcon" action="addButton" />
+        <div v-if="header === 'Element Style'">
+          <!-- <AddElement title="Text" :image="TextIcon" action="addText" />
+          <AddElement title="Button" :image="ButtonIcon" action="addButton" class="tw-mt-12" />
+          <AddElement title="Image" :image="ImageIcon" action="addImage" class="tw-mt-12" /> -->
+          <ColorPallet />
         </div>
       </div>
     </transition>
@@ -29,10 +30,10 @@
 <script setup>
 import { ref } from 'vue'
 import ColorPallet from './ColorPallet.vue'
-import AddElement from './AddElement.vue'
-import TextIcon from '@/assets/img/texticon.png'
-import ImageIcon from '@/assets/img/imageicon.png'
-import ButtonIcon from '@/assets/img/buttonicon.png'
+// import AddElement from './AddElement.vue'
+// import TextIcon from '@/assets/img/texticon.png'
+// import ImageIcon from '@/assets/img/imageicon.png'
+// import ButtonIcon from '@/assets/img/buttonicon.png'
 
 defineProps({
   header: String

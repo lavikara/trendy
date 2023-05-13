@@ -1,5 +1,5 @@
 const templates = {
-  textTemplate: `<div draggable="true" class="tw-absolute tw-top-[20px] tw-left-[20px]">
+  textTemplate: `<div id="newDragTemplate" draggable="true" class="tw-absolute tw-top-[20px] tw-left-[20px]">
                   <div class="tw-relative tw-h-full tw-min-w-[200px]">
                     <div id="newElement" contentEditable="false" class="tw-relative tw-h-full tw-text-white tw-text-lg xs:tw-text-2xl tw-font-bold tw-text-center">
                       Edit text here
@@ -28,7 +28,7 @@ const templates = {
                     </div>
                   </div>
                 </div>`,
-  imageTemplate: `<div draggable="true" class="tw-absolute tw-top-[60px]">
+  imageTemplate: `<div id="newDragTemplate" draggable="true" class="tw-absolute tw-top-[60px]">
                     <div class="tw-relative">
                       <img id="newImage" class="tw-h-[100px]"/>                 
                       <div id="newDrag" class="tw-invisible tw-flex tw-justify-end tw--mt-[30px] tw--mr-[28px]">
@@ -55,7 +55,7 @@ const templates = {
                       </div>
                     </div>
                   </div>`,
-  buttonTemplate: `<div draggable="true" class="tw-absolute tw-top-[60px] tw-cursor-move">                      
+  buttonTemplate: `<div id="newDragTemplate" draggable="true" class="tw-absolute tw-top-[60px] tw-cursor-move">                      
                     <div class="tw-relative tw-h-[55px] tw-min-w-[200px]">
                       <button
                           id="newElement"
