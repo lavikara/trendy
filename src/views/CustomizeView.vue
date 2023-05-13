@@ -183,7 +183,7 @@ const saveTemplate = () => {
   let payload = {}
   let id = route.params.id
   storedTemplates = getItem('editedTemplate')
-  removeActiveWrapper(activeElement.value, activeDragIcon.value)
+  removeActiveWrapper(activeElement.value, activeDragIcon.value, activeToolbar.value)
   const templateContainer = document.getElementById('templateContainer')
   payload.id = id
   payload.templateImage = template1
