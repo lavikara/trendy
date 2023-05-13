@@ -61,7 +61,7 @@ let target = ref(null)
 let showImageGallary = ref(false)
 let deviceType = ref('')
 let textElementCounter = ref(0)
-let activeElement = ref('')
+// let activeElement = ref('')
 let activeDragIcon = ref('')
 let activeToolbar = ref('')
 let cloneAble = ref('')
@@ -93,6 +93,14 @@ const saveBtnStyle = reactive({
 
 const templateBgColor = computed(() => {
   return store.state.templateBgColor
+})
+
+const activeElement = computed(() => {
+  return store.state.activeElement
+})
+
+const elementColor = computed(() => {
+  return store.state.elementColor
 })
 
 const addText = computed(() => {
@@ -239,6 +247,13 @@ const setStyle = (color) => {
   templateContainer.style.backgroundColor = color
 }
 
+const setElementColor = () => {
+  if (activeElement.value) {
+    const element = document.getElementById(activeElement.value)
+    element.style.color = elementColor.value
+  }
+}
+
 const setElement = (template) => {
   textElementCounter.value = Date.now()
   const templateContainer = document.getElementById('templateContainer')
@@ -276,7 +291,8 @@ const setActiveWrapper = (event) => {
   if (activeElement.value !== '') {
     removeActiveWrapper(activeElement.value, activeDragIcon.value, activeToolbar.value)
   }
-  activeElement.value = event.target.id
+  // activeElement.value = event.target.id
+  store.dispatch('setActiveElement', event.target.id)
   if (!event.target.nextElementSibling) return
   activeDragIcon.value = event.target.nextElementSibling.id
   activeToolbar.value = event.target.nextElementSibling.nextElementSibling.id
@@ -338,6 +354,9 @@ watch(addImage, () => {
 
 watch(addButton, () => {
   if (addButton.value) setElement(templates.buttonTemplate)
+})
+watch(elementColor, (newVal, oldVal) => {
+  if (newVal !== oldVal && oldVal !== '') setElementColor()
 })
 </script>
 

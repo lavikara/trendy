@@ -12,13 +12,13 @@
     <transition name="dropdown" @enter="enter" @after-enter="afterEnter" @leave="leave">
       <div v-show="toggleSidebar">
         <div v-if="header === 'Background Style'">
-          <ColorPallet />
+          <BackgroundColorPallet />
         </div>
         <div v-if="header === 'Element Style'">
           <!-- <AddElement title="Text" :image="TextIcon" action="addText" />
           <AddElement title="Button" :image="ButtonIcon" action="addButton" class="tw-mt-12" />
           <AddElement title="Image" :image="ImageIcon" action="addImage" class="tw-mt-12" /> -->
-          <ColorPallet />
+          <ElementColorPallet />
         </div>
       </div>
     </transition>
@@ -28,18 +28,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import ColorPallet from './ColorPallet.vue'
-// import AddElement from './AddElement.vue'
-// import TextIcon from '@/assets/img/texticon.png'
-// import ImageIcon from '@/assets/img/imageicon.png'
-// import ButtonIcon from '@/assets/img/buttonicon.png'
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
+import BackgroundColorPallet from './BackgroundColorPallet.vue'
+import ElementColorPallet from './ElementColorPallet.vue'
+
+const store = useStore()
 
 defineProps({
   header: String
 })
 
 const toggleSidebar = ref(false)
+
+const activeElement = computed(() => {
+  return store.state.activeElement
+})
 
 const enter = (element) => {
   element.style.height = 'auto'
