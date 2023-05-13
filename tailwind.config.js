@@ -14,7 +14,7 @@ module.exports = {
           bg2: '#db768d'
         },
         blue: {
-          DEFAULT: '#24419a',
+          DEFAULT: '#0098da',
           bg1: '#fdfcf7',
           bg2: '#082077',
           bg3: '#e6e6fa',
@@ -33,7 +33,7 @@ module.exports = {
           bg2: '#FAF9F6'
         },
         black: {
-          DEFAULT: '#1B1B1A',
+          DEFAULT: '#2E2F32',
           bg1: '#363633'
         }
       }

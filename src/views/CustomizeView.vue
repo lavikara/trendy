@@ -1,36 +1,39 @@
 <template>
-  <div id="customizeview">
-    <SidebarLayout />
-    <div class="container tw-h-screen">
-      <main
-        ref="dropZone"
-        class="drop-zone tw-relative tw-h-screen tw-flex tw-justify-center tw-items-center tw-px-4 tw-py-28 lg:tw-pb-44 lg:tw-pt-32"
-        @drop="onDrop"
-        @dragenter="onDragEnter"
-        @dragover.prevent
-      >
-        <BackBtn
-          :btnStyle="backBtnStyle"
-          class="tw-absolute tw--top-0 tw--left-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
-        />
-        <IconBtn
-          :btnStyle="saveBtnStyle"
-          :icon="saveicon"
-          alt="save"
-          class="tw-absolute tw--top-0 tw--right-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
-          @click="saveTemplate"
-        />
-        <div
-          v-if="showImageGallary"
-          class="tw-absolute tw-top-auto tw-left-auto tw-w-2/4 tw-h-3/6 tw-overflow-scroll tw-rounded-lg tw-bg-gray-bg2 tw-shadow-md tw-z-50"
+  <div id="customizeview" class="tw-flex tw-h-full tw-bg-fixed tw-bg-no-repeat tw-bg-cover">
+    <ElementSidebarLayout />
+    <div class="container tw-w-full tw-bg-black">
+      <div class="tw-h-screen tw-w-full">
+        <main
+          ref="dropZone"
+          class="drop-zone tw-relative tw-h-screen tw-flex tw-justify-center tw-items-center tw-px-4 tw-py-28 lg:tw-pb-44 lg:tw-pt-32"
+          @drop="onDrop"
+          @dragenter="onDragEnter"
+          @dragover.prevent
         >
-          <ImageGallary
-            @imageSelected="setImageElement"
-            @close="showImageGallary = !showImageGallary"
+          <BackBtn
+            :btnStyle="backBtnStyle"
+            class="tw-absolute tw--top-0 tw--left-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
           />
-        </div>
-      </main>
+          <IconBtn
+            :btnStyle="saveBtnStyle"
+            :icon="saveicon"
+            alt="save"
+            class="tw-absolute tw--top-0 tw--right-0 tw-w-[80px] tw-rounded-full tw-ml-4 tw-mt-4"
+            @click="saveTemplate"
+          />
+          <div
+            v-if="showImageGallary"
+            class="tw-absolute tw-top-auto tw-left-auto tw-w-2/4 tw-h-3/6 tw-overflow-scroll tw-rounded-lg tw-bg-gray-bg2 tw-shadow-md tw-z-50"
+          >
+            <ImageGallary
+              @imageSelected="setImageElement"
+              @close="showImageGallary = !showImageGallary"
+            />
+          </div>
+        </main>
+      </div>
     </div>
+    <StylesSidebarLayout />
   </div>
 </template>
 
@@ -40,7 +43,8 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import BackBtn from '@/components/general/BackBtn.vue'
 import IconBtn from '@/components/general/IconBtn.vue'
-import SidebarLayout from '@/layout/customize/SidebarLayout.vue'
+import StylesSidebarLayout from '@/layout/customize/StylesSidebarLayout.vue'
+import ElementSidebarLayout from '@/layout/customize/ElementSidebarLayout.vue'
 import ImageGallary from '@/layout/customize/ImageGallary.vue'
 import { getItem, setItem } from '@/utils/storage.js'
 import { searchArray } from '@/utils/helpers'
@@ -73,13 +77,13 @@ let newCloneable = reactive({
 })
 
 const backBtnStyle = reactive({
-  backgroundColor: '#FAF9F6',
+  backgroundColor: '#FFFFFF',
   hoverColor: '#24419a',
   hoverBgColor: '#d7ceb6'
 })
 
 const saveBtnStyle = reactive({
-  backgroundColor: '#FAF9F6',
+  backgroundColor: '#FFFFFF',
   hoverColor: '#24419a',
   hoverBgColor: '#d7ceb6',
   width: '50px',
@@ -115,8 +119,7 @@ onMounted(() => {
 })
 
 const startDrag = (event) => {
-  console.log(event)
-  event.target.id === 'cloneable' ? (cloneAble.value = event.target.id) : ''
+  event.target.id.includes('clone') ? (cloneAble.value = event.target.id) : ''
   if (event.target.nodeName === 'IMG') return
   target.value = event.target
   event.dataTransfer.dropEffect = 'move'
@@ -131,32 +134,31 @@ const onDragEnter = (event) => {
 }
 
 const onDrop = (event) => {
-  console.log(event)
   textElementCounter.value = Date.now()
   if (cloneAble.value !== '') {
     const element = document.getElementById(cloneAble.value)
-    const clone = element.cloneNode(true)
-    clone.id = 'cloneable' + textElementCounter.value
-    clone.lastChild.id = 'cloneableOverlay' + textElementCounter.value
-    clone.firstChild.firstChild.id = 'cloneableNewElement' + textElementCounter.value
-    clone.firstChild.firstChild.nextElementSibling.id =
-      'cloneableNewDrag' + textElementCounter.value
-    clone.firstChild.firstChild.nextElementSibling.nextElementSibling.id =
-      'cloneableNewToolbar' + textElementCounter.value
+    element.cloneNode(true)
     const addElement = document.getElementById('add-element')
     addElement.insertAdjacentHTML('beforeend', element.outerHTML)
     element.remove()
+    if (element.id === 'cloneText') setElement(templates.textTemplate)
+    if (element.id === 'cloneButton') setElement(templates.buttonTemplate)
+    if (element.id === 'cloneImage') {
+      showImageGallary.value = !showImageGallary.value
+      target.value = null
+      cloneAble.value = ''
+      return
+    }
+
+    const newDragTemplate = (document.getElementById('newDragTemplate').id =
+      'newDragTemplate' + textElementCounter.value)
+    const updatedTemplateId = document.getElementById(newDragTemplate)
     let newX = !isTouchDevice() ? event.clientX : event.touches[0].clientX
     let newY = !isTouchDevice() ? event.clientY : event.touches[0].clientY
-    if (!target.value) return
-    clone.style.position = 'absolute'
-    clone.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
-    clone.style.left = target.value.offsetLeft - (newCloneable.x - newX) + 'px'
+    updatedTemplateId.style.position = 'absolute'
+    updatedTemplateId.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
+    updatedTemplateId.style.left = target.value.offsetLeft - (initial.x - newX) + 'px'
     target.value = null
-    const templateContainer = document.getElementById('templateContainer')
-    templateContainer.insertAdjacentHTML('beforeend', clone.outerHTML)
-    document.getElementById(clone.lastChild.id).remove()
-    addEvents()
     cloneAble.value = ''
     return
   }
@@ -238,6 +240,9 @@ const setElement = (template) => {
 }
 
 const setActiveWrapper = (event) => {
+  if (event.target.id === 'textSvg' && event.type === 'click') return
+  if (event.target.id === 'buttonSvg' && event.type === 'click') return
+  if (event.target.id === 'imageSvg' && event.type === 'click') return
   zIndex.value++
   if (event.target.parentNode.id === 'cloneable') return
   if (
@@ -324,10 +329,9 @@ watch(addButton, () => {
 <style lang="scss" scoped>
 #customizeview {
   @include fadeIn;
-  height: 100%;
-  display: flex;
+  background: url(@/assets/img/background.avif);
   .container {
-    width: 100%;
+    background-color: $opaque-bg;
 
     @media screen and (min-width: 1280px) {
       width: calc(100% - #{$side-bar-width});

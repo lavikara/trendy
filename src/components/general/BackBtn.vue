@@ -3,7 +3,7 @@
     <button
       ref="backBtnEl"
       @click="$router.go(-1)"
-      class="tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-shadow-md"
+      class="tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center"
       :style="btnStyle"
       @mouseover="setHoverStyle"
       @mouseleave="resetStyle"

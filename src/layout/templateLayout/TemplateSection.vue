@@ -64,12 +64,19 @@ onMounted(() => {
 })
 
 const editPopup = (emitObj) => {
-  const id = emitObj.templateId ? emitObj.templateId : Date.now()
+  const id = emitObj.templateId < 1000 ? Date.now() : emitObj.templateId
   const template =
     emitObj.event.target.offsetParent.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
   setItem('currentTemplate', template.innerHTML)
   router.push({ name: 'CustomizeView', params: { id } })
 }
+
+// const editSavedPopup = (emitObj) => {
+//   const template =
+//     emitObj.event.target.offsetParent.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
+//   setItem('currentTemplate', template.innerHTML)
+//   router.push({ name: 'CustomizeView', params: { id: emitObj.templateId } })
+// }
 
 const toggleDefaultShowModal = (index) => {
   showDefaultPreviewModal.value = true
