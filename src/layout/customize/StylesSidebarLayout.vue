@@ -11,7 +11,6 @@
 
 <script setup>
 import DropDown from '@/components/customize/DropDown.vue'
-// import ColorPallet from '@/components/customize/ColorPallet.vue'
 </script>
 
 <style lang="scss" scoped>

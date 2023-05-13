@@ -3,6 +3,8 @@ import { createStore } from 'vuex'
 const store = createStore({
   state: {
     templateBgColor: '',
+    activeElement: '',
+    elementColor: '',
     addText: null,
     addImage: null,
     addButton: null
@@ -11,6 +13,12 @@ const store = createStore({
   mutations: {
     UPDATE_TEMPLATE_BG: (state, payload) => {
       state.templateBgColor = payload
+    },
+    UPDATE_ELEMENT_COLOR: (state, payload) => {
+      state.elementColor = payload
+    },
+    UPDATE_ACTIVE_ELEMENT: (state, payload) => {
+      state.activeElement = payload
     },
     UPDATE_ADD_TEXT: (state, payload) => {
       state.addText = payload
@@ -25,6 +33,12 @@ const store = createStore({
   actions: {
     changeTemplateBg({ commit }, payload) {
       commit('UPDATE_TEMPLATE_BG', payload)
+    },
+    changeElementColor({ commit }, payload) {
+      commit('UPDATE_ELEMENT_COLOR', payload)
+    },
+    setActiveElement({ commit }, payload) {
+      commit('UPDATE_ACTIVE_ELEMENT', payload)
     },
     addText({ commit }, payload) {
       commit('UPDATE_ADD_TEXT', payload)
