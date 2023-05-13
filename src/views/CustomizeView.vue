@@ -214,7 +214,23 @@ const setImageElement = (image) => {
   document.getElementById('newDrag').id === 'newDrag'
     ? (document.getElementById('newDrag').id = 'newDrag' + textElementCounter.value)
     : ''
+  document.getElementById('newToolbar').id === 'newToolbar'
+    ? (document.getElementById('newToolbar').id = 'newToolbar' + textElementCounter.value)
+    : ''
   showImageGallary.value = !showImageGallary.value
+  // if (cloneAble.value === 'cloneImage') {
+  //   const newDragTemplate = (document.getElementById('newDragTemplate').id =
+  //     'newDragTemplate' + textElementCounter.value)
+  //   const updatedTemplateId = document.getElementById(newDragTemplate)
+  //   let newX = !isTouchDevice() ? event.clientX : event.touches[0].clientX
+  //   let newY = !isTouchDevice() ? event.clientY : event.touches[0].clientY
+  //   updatedTemplateId.style.position = 'absolute'
+  //   updatedTemplateId.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
+  //   updatedTemplateId.style.left = target.value.offsetLeft - (initial.x - newX) + 'px'
+  //   target.value = null
+  //   cloneAble.value = ''
+  //   return
+  // }
   addEvents()
 }
 
@@ -240,10 +256,10 @@ const setElement = (template) => {
 }
 
 const setActiveWrapper = (event) => {
+  zIndex.value++
   if (event.target.id === 'textSvg' && event.type === 'click') return
   if (event.target.id === 'buttonSvg' && event.type === 'click') return
   if (event.target.id === 'imageSvg' && event.type === 'click') return
-  zIndex.value++
   if (event.target.parentNode.id === 'cloneable') return
   if (
     event.target.id.includes('toolbar') ||
@@ -260,7 +276,6 @@ const setActiveWrapper = (event) => {
   if (activeElement.value !== '') {
     removeActiveWrapper(activeElement.value, activeDragIcon.value, activeToolbar.value)
   }
-
   activeElement.value = event.target.id
   if (!event.target.nextElementSibling) return
   activeDragIcon.value = event.target.nextElementSibling.id
