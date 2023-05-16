@@ -1,7 +1,7 @@
 const templates = {
   textTemplate: `<div id="newDragTemplate" draggable="true" class="tw-absolute tw-top-[20px] tw-left-[20px]">
                   <div class="tw-relative tw-h-full tw-min-w-[200px]">
-                    <div id="newElement" contentEditable="false" class="tw-relative tw-h-full tw-text-white tw-text-lg xs:tw-text-2xl tw-font-bold tw-text-center">
+                    <div id="newTextElement" contentEditable="false" class="tw-relative tw-h-full tw-text-white tw-text-lg xs:tw-text-2xl tw-font-bold tw-text-center">
                       Edit text here
                     </div>
                     <div id="newDrag" class="tw-invisible tw-flex tw-justify-end tw--mt-[30px] tw--mr-[28px]">
@@ -58,7 +58,7 @@ const templates = {
   buttonTemplate: `<div id="newDragTemplate" draggable="true" class="tw-absolute tw-top-[60px] tw-cursor-move">                      
                     <div class="tw-relative tw-h-[55px] tw-min-w-[200px]">
                       <button
-                          id="newElement"
+                          id="newButtonElement"
                           contentEditable="false"
                           type="reset"
                           class="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-bg-black tw-rounded-lg tw-font-semibold tw-text-white hover:tw-bg-black-bg1"

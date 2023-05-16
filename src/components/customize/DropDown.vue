@@ -15,10 +15,15 @@
           <BackgroundColorPallet />
         </div>
         <div v-if="header === 'Element Style'">
-          <!-- <AddElement title="Text" :image="TextIcon" action="addText" />
-          <AddElement title="Button" :image="ButtonIcon" action="addButton" class="tw-mt-12" />
-          <AddElement title="Image" :image="ImageIcon" action="addImage" class="tw-mt-12" /> -->
-          <ElementColorPallet />
+          <div v-if="activeElement" class="tw-mb-2">
+            <HeaderOptions :options="options" @emitOption="emitOption" class="tw-px-" />
+            <ElementColorPallet class="tw-mt-4" />
+          </div>
+          <EmptyState v-if="!activeElement">
+            <template v-slot:message>
+              <p class="tw-text-white tw-text-center">Select an element to see edit options</p>
+            </template>
+          </EmptyState>
         </div>
       </div>
     </transition>
@@ -28,10 +33,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import BackgroundColorPallet from './BackgroundColorPallet.vue'
 import ElementColorPallet from './ElementColorPallet.vue'
+import HeaderOptions from '@/components/general/HeaderOptions.vue'
+import EmptyState from '@/components/notification/EmptyState.vue'
 
 const store = useStore()
 
@@ -40,10 +47,16 @@ defineProps({
 })
 
 const toggleSidebar = ref(false)
+const options = reactive(['Text', 'Background'])
 
 const activeElement = computed(() => {
   return store.state.activeElement
 })
+
+// const emitOption = (option) => {
+// console.log(option)
+// console.log(activeElement.value)
+// }
 
 const enter = (element) => {
   element.style.height = 'auto'

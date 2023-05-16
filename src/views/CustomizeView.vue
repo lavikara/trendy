@@ -61,7 +61,7 @@ let target = ref(null)
 let showImageGallary = ref(false)
 let deviceType = ref('')
 let textElementCounter = ref(0)
-// let activeElement = ref('')
+let templateParentContainer = ref('')
 let activeDragIcon = ref('')
 let activeToolbar = ref('')
 let cloneAble = ref('')
@@ -134,6 +134,8 @@ const startDrag = (event) => {
   event.dataTransfer.effectAllowed = 'move'
   initial.x = !isTouchDevice() ? event.clientX : event.touches[0].clientX
   initial.y = !isTouchDevice() ? event.clientY : event.touches[0].clientY
+  templateParentContainer.value = document.getElementById('templateParentContainer')
+  templateParentContainer.value.style.border = '2px dashed #ffffff'
 }
 
 const onDragEnter = (event) => {
@@ -143,6 +145,7 @@ const onDragEnter = (event) => {
 
 const onDrop = (event) => {
   textElementCounter.value = Date.now()
+  templateParentContainer.value.style.border = '0px solid #ffffff'
   if (cloneAble.value !== '') {
     const element = document.getElementById(cloneAble.value)
     element.cloneNode(true)
@@ -212,7 +215,7 @@ const saveTemplate = () => {
 
 const setImageElement = (image) => {
   textElementCounter.value = Date.now()
-  const templateContainer = document.getElementById('templateContainer')
+  const templateContainer = document.getElementById('templateParentContainer')
   templateContainer.insertAdjacentHTML('beforeend', templates.imageTemplate)
   const img = document.getElementById('newImage')
   img.src = image
@@ -226,19 +229,19 @@ const setImageElement = (image) => {
     ? (document.getElementById('newToolbar').id = 'newToolbar' + textElementCounter.value)
     : ''
   showImageGallary.value = !showImageGallary.value
-  // if (cloneAble.value === 'cloneImage') {
-  //   const newDragTemplate = (document.getElementById('newDragTemplate').id =
-  //     'newDragTemplate' + textElementCounter.value)
-  //   const updatedTemplateId = document.getElementById(newDragTemplate)
-  //   let newX = !isTouchDevice() ? event.clientX : event.touches[0].clientX
-  //   let newY = !isTouchDevice() ? event.clientY : event.touches[0].clientY
-  //   updatedTemplateId.style.position = 'absolute'
-  //   updatedTemplateId.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
-  //   updatedTemplateId.style.left = target.value.offsetLeft - (initial.x - newX) + 'px'
-  //   target.value = null
-  //   cloneAble.value = ''
-  //   return
-  // }
+  if (cloneAble.value === 'cloneImage') {
+    const newDragTemplate = (document.getElementById('newDragTemplate').id =
+      'newDragTemplate' + textElementCounter.value)
+    const updatedTemplateId = document.getElementById(newDragTemplate)
+    let newX = !isTouchDevice() ? event.clientX : event.touches[0].clientX
+    let newY = !isTouchDevice() ? event.clientY : event.touches[0].clientY
+    updatedTemplateId.style.position = 'absolute'
+    updatedTemplateId.style.top = target.value.offsetTop - (initial.y - newY) + 'px'
+    updatedTemplateId.style.left = target.value.offsetLeft - (initial.x - newX) + 'px'
+    target.value = null
+    cloneAble.value = ''
+    return
+  }
   addEvents()
 }
 
@@ -258,8 +261,12 @@ const setElement = (template) => {
   textElementCounter.value = Date.now()
   const templateContainer = document.getElementById('templateContainer')
   templateContainer.insertAdjacentHTML('beforeend', template)
-  document.getElementById('newElement').id === 'newElement'
-    ? (document.getElementById('newElement').id = 'newElement' + textElementCounter.value)
+  document.getElementById('newTextElement')?.id === 'newTextElement'
+    ? (document.getElementById('newTextElement').id = 'newTextElement' + textElementCounter.value)
+    : ''
+  document.getElementById('newButtonElement')?.id === 'newButtonElement'
+    ? (document.getElementById('newButtonElement').id =
+        'newButtonElement' + textElementCounter.value)
     : ''
   document.getElementById('newDrag').id === 'newDrag'
     ? (document.getElementById('newDrag').id = 'newDrag' + textElementCounter.value)
